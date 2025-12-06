@@ -11,10 +11,10 @@
     <application
         android:name=".ReminderApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_launcher"
         android:label="AI Reminder"
-        android:theme="@style/Theme.Material3.DayNight.NoActionBar">
-        
+        android:theme="@style/Theme.AIReminder">
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -24,6 +24,10 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".alarm.AlarmReceiver" android:exported="false"/>
+        <receiver
+            android:name=".alarm.AlarmReceiver"
+            android:exported="false" />
+
     </application>
+
 </manifest>
