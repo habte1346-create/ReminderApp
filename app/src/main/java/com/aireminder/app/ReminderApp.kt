@@ -11,9 +11,10 @@ class ReminderApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // We use a new name "remindr-db-v2" to force a clean database start
         database = Room.databaseBuilder(
             applicationContext,
-            AppDatabase::class.java, "reminder-db"
-        ).build()
+            AppDatabase::class.java, "remindr-db-v2"
+        ).fallbackToDestructiveMigration().build()
     }
 }
