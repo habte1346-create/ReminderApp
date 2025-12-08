@@ -44,17 +44,18 @@ class MainActivity : ComponentActivity() {
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
         }
 
-        setContent {
-            val prefs = getSharedPreferences("remindr_prefs", Context.MODE_PRIVATE)
-            // Fix: Load saved theme preference
-            var isDark by remember { mutableStateOf(prefs.getBoolean("dark_mode", true)) }
+        val prefs = getSharedPreferences("remindr_prefs", Context.MODE_PRIVATE)
+        var isDark = prefs.getBoolean("dark_mode", true)
 
-            RemindrTheme(isDark) {
+        setContent {
+            var darkMode by remember { mutableStateOf(isDark) }
+
+            RemindrTheme(darkMode) {
                 MainScreen(
-                    isDark = isDark,
+                    isDark = darkMode,
                     onToggleTheme = {
-                        val newMode = !isDark
-                        isDark = newMode
+                        val newMode = !darkMode
+                        darkMode = newMode
                         prefs.edit().putBoolean("dark_mode", newMode).apply()
                     }
                 )
