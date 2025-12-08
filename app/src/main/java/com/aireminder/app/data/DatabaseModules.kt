@@ -40,7 +40,11 @@ interface ReminderDao {
     suspend fun getById(id: Int): Reminder?
 }
 
-@Database(entities = [Reminder::class], version = 2)
+@Database(
+    entities = [Reminder::class],
+    version = 2,
+    exportSchema = false  // 🚀 Fix added here
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun reminderDao(): ReminderDao
 }
