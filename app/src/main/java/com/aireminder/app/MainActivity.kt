@@ -45,9 +45,11 @@ class MainActivity : ComponentActivity() {
         }
 
         val prefs = getSharedPreferences("remindr_prefs", Context.MODE_PRIVATE)
-        var isDark = prefs.getBoolean("dark_mode", true)
+        // Load the saved setting, default to true (Dark Mode)
+        val isDark = prefs.getBoolean("dark_mode", true)
 
         setContent {
+            // We use a state here so the UI updates immediately when toggled
             var darkMode by remember { mutableStateOf(isDark) }
 
             RemindrTheme(darkMode) {
@@ -91,6 +93,9 @@ fun MainScreen(isDark: Boolean, onToggleTheme: () -> Unit) {
     val activeTasks by dao.getActive().collectAsState(initial = emptyList())
     val recentTasks by dao.getRecent().collectAsState(initial = emptyList())
     
+    // FIX: Capture the context HERE (at the top), not inside the button click
+    val context = LocalContext.current
+
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var showAddDialog by remember { mutableStateOf(false) }
@@ -199,7 +204,8 @@ fun MainScreen(isDark: Boolean, onToggleTheme: () -> Unit) {
                 scope.launch {
                     val r = Reminder(title = title, timestamp = time, iconId = icon, repeatMode = repeat)
                     val id = dao.insert(r)
-                    scheduleAlarm(LocalContext.current, r.copy(id = id.toInt()))
+                    // FIX: Use the 'context' variable we captured at the top
+                    scheduleAlarm(context, r.copy(id = id.toInt())) 
                     showAddDialog = false
                 }
             }
